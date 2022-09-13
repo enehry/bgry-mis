@@ -142,11 +142,12 @@ class BarangayOfficialController extends Controller
 
     ActivityLog::log(
       'barangay_officials',
-      'Logged out barangay official with id ' . Auth::user()->id . ' ' . Auth::user()->name,
+      'Logged out barangay official with id ' . Auth::guard('barangay_official')->user()->id . ' ' . Auth::guard('barangay_official')->user()->name,
       Auth::user()->id,
     );
 
-    auth()->logout();
+    // logout all sessions
+    Auth::guard('barangay_official')->logout();
 
     $request->session()->invalidate();
     $request->session()->regenerateToken();
