@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('complainant');
             $table->string('respondent');
             $table->string('victim');
-            $table->string('type');
+            // $table->string('type');
             $table->string('location');
             $table->string('date');
             $table->string('time');
