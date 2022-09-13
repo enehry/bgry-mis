@@ -13,7 +13,7 @@ class ActivityLog
     $log = new ModelsActivityLog();
     $log->user_id = Auth::user()->id;
     $log->table_name = $table_name;
-    $log->action = Auth::user()->name ?? '' . ' ' . $action;
+    $log->action = $action;
     $log->table_id = $table_id;
     $log->save();
   }
