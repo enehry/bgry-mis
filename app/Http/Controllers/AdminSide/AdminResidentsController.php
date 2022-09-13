@@ -211,6 +211,7 @@ class AdminResidentsController extends Controller
     if ($residents) {
       if (Hash::check($request->password, $residents->password)) {
         $request->session()->put('id', $residents->id);
+        Auth::login($residents);
         return redirect('/home');
       } else {
         return back()->with('fail', ' Password Incorrect ');

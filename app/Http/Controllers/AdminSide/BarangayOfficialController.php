@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminSide;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helper\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\barangayOfficial;
@@ -44,6 +45,12 @@ class BarangayOfficialController extends Controller
       $formFields['official_image'] = $request->file('official_image')->store('images', 'public');
     }
     $official = barangayOfficial::create($formFields);
+
+    ActivityLog::log(
+      'barangay_officials',
+      'created barangay official with id ' . $official->id . ' ' . $official->name,
+      $official->id,
+    );
     return redirect('/listBrgyOfficial')->with('message', 'Barangay Official Created Successfuly');
   }
 
@@ -54,6 +61,11 @@ class BarangayOfficialController extends Controller
 
     $official->delete();
 
+    ActivityLog::log(
+      'barangay_officials',
+      'Deleted barangay official with id ' . $official->id . ' ' . $official->name,
+      $official->id,
+    );
     return back()->with('message', 'Barangay Official Profile Deleted');
   }
 
@@ -76,6 +88,12 @@ class BarangayOfficialController extends Controller
       $formFields['official_image'] = $request->file('official_image')->store('images', 'public');
     }
     $official->update($formFields);
+
+    ActivityLog::log(
+      'barangay_officials',
+      'Updated barangay official with id ' . $official->id . ' ' . $official->name,
+      $official->id,
+    );
 
     return back()->with('message', 'Update Successful');
   }
@@ -104,11 +122,13 @@ class BarangayOfficialController extends Controller
 
 
     if (Auth::guard('barangay_official')->attempt($credentials)) {
-
-
       Auth::login(Auth::guard('barangay_official')->user());
       // $request->session()->regenerate();
-
+      ActivityLog::log(
+        'barangay_officials',
+        'Logged in barangay official with id ' . Auth::user()->id . ' ' . Auth::user()->name,
+        Auth::user()->id,
+      );
       return redirect('/dashboard');
     } else {
 
@@ -120,10 +140,17 @@ class BarangayOfficialController extends Controller
   public function logout(Request $request)
   {
 
+    ActivityLog::log(
+      'barangay_officials',
+      'Logged out barangay official with id ' . Auth::user()->id . ' ' . Auth::user()->name,
+      Auth::user()->id,
+    );
+
     auth()->logout();
 
     $request->session()->invalidate();
     $request->session()->regenerateToken();
+
     return redirect('/')->with('message', ' Youre Logout');
   }
 }
