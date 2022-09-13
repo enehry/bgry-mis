@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminSide;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helper\ActivityLog;
 use Illuminate\Http\Request;
 use App\Models\AdminResidents;
 use Illuminate\Support\Facades\Auth;
@@ -118,6 +119,14 @@ class AdminResidentsController extends Controller
     }
 
     $adminResidents = AdminResidents::create($formFields);
+
+    ActivityLog::log(
+      'App\AdminResidents',
+      'Added Resident',
+      $adminResidents->first_name .
+        ' ' . $adminResidents->last_name,
+      $adminResidents->id
+    );
 
     return redirect('/residents')->with('message', 'User Created Successfuly');
   }

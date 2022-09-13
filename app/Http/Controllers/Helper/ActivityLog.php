@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Auth;
 class ActivityLog
 {
 
-  public static function log($user, $action, $description)
+  public static function log($table_name, $action, $table_id)
   {
     $log = new ModelsActivityLog();
     $log->user_id = Auth::user()->id;
-    $log->action = $action;
-    $log->description = $description;
+    $log->table_name = $table_name;
+    $log->action = Auth::user()->name ?? '' . ' ' . $action;
+    $log->table_id = $table_id;
     $log->save();
   }
 }
