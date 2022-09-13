@@ -15,6 +15,7 @@ return new class extends Migration
   {
     Schema::create('request_certificates', function (Blueprint $table) {
       $table->id();
+      $table->unsignedBigInteger('admin_resident_id');
       $table->string('fullname');
       $table->string('doctype');
       $table->string('date');

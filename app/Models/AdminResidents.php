@@ -41,4 +41,8 @@ class AdminResidents extends Authenticatable
         ->orWhere('last_name', 'like', '%' . request('search') . '%');
     }
   }
+
+  public function request_certificate() {
+    return $this->hasMany(RequestCertificate::class);
+  }
 }

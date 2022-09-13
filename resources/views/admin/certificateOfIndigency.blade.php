@@ -55,7 +55,7 @@
                   </button>
               </div>
               <div class="modal-body">
-                <form action="{{url('certificateOfIndigency/barangayIndigency',$indigency->id)}}">
+                <form action="{{url('certificateOfIndigency/barangayIndigency',$indigency->admin_resident_id)}}">
                     <div class="form-group">
                       <label>Payment Method</label>
                       <input type="text" class="form-control" name="date" value="{{$indigency->paymentMethod}}" disabled>

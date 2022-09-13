@@ -8,8 +8,7 @@ use App\Models\RequestCertificate;
 use App\Models\Blotter;
 use App\Models\AdminResidents;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class RequestController extends Controller
 {
@@ -52,11 +51,18 @@ class RequestController extends Controller
     ]);
 
 
-
     if ($request->hasFile('screenshot')) {
       $formFields['screenshot'] = $request->file('screenshot')->store('images', 'public');
     }
-    $certificate = RequestCertificate::create($formFields);
+    $certificate = RequestCertificate::create([
+      'fullname' => $request->fullname,
+      'docType' => $request->docType,
+      'date' => $request->date,
+      'paymentMethod' => $request->paymentMethod,
+      'referenceNumber' => $request->referenceNumber,
+      'purpose' => $request->purpose,
+      'admin_resident_id' => Auth::user()->id,
+    ]);
 
     ActivityLog::log(
       'request_certificates',
