@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    // Paginator::useBootstrapFive();
+    Paginator::useBootstrapFive();
 
     // !! SHARING the setting to all view
     // !! WITHOUT checking if table exist will destroy 
