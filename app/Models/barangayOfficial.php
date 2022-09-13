@@ -3,20 +3,31 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class barangayOfficial extends Model
+class barangayOfficial extends Authenticatable
 {
-    use HasFactory;
-    protected $fillable = [
-        'name',
-        'age',
-        'birthdate',
-        'gender',
-        'position',
-        'phone_number',
-        'email',
-        'password',
-        'official_image',
-    ];
+  use HasFactory, HasApiTokens, Notifiable;
+  protected $fillable = [
+    'name',
+    'age',
+    'birthdate',
+    'gender',
+    'position',
+    'phone_number',
+    'email',
+    'password',
+    'official_image',
+  ];
+
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
+
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+  ];
 }
