@@ -170,7 +170,9 @@ Route::get('/revenues', [AdminResidentsController::class, 'revenues']);
 Route::get('/blotter', [BlotterReportController::class, 'blotter']);
 
 //Records
-Route::get('/reports/folders', [AdminResidentsController::class, 'folders']);
+// !! IMPORTANT I RENAME the reports/folders to reports-folder
+// !! it has a conflict on new route reports/{category}
+Route::get('/reports-folders', [AdminResidentsController::class, 'folders']);
 
 // User Profiling 
 Route::get('/profiling', [ProfilingController::class, 'profiling']);
@@ -210,24 +212,27 @@ Route::get('/deleteAnnouncements/{id}', [AnnouncementsController::class, 'delete
 Route::put('/updateAnouncements/{announcement}', [AnnouncementsController::class, 'updateAnnouncements']);
 
 //File Manager
-Route::get('/reports', [FilesController::class, 'reports']);
+// !!important please read, report now single page
+// !! all report has own its own category
+Route::get('/reports/{category}', [FilesController::class, 'reports']);
 Route::get('create', [FilesController::class, 'create']);
-Route::post('/reports/store', [FilesController::class, 'store']);
+Route::post('/reports/store/{category}', [FilesController::class, 'store']);
 Route::get('/deleteFile/{id}', [FilesController::class, 'deletefile']);
-Route::get('reports/viewFile', [FilesController::class, 'viewFile']);
-Route::get('/download/{file}', [FilesController::class, 'download']);
+// Route::get('reports/viewFile', [FilesController::class, 'viewFile']);
+// Route::get('/download/{file}', [FilesController::class, 'download']);
 
+//!! ALL OTHER ROUTES THAT ARE RELATED TO REPORT ARE COMMENTED
 //Financial
-Route::get('/financialreport', [FilesController::class, 'financialreport']);
-Route::get('create2', [FilesController::class, 'create2']);
-Route::post('/financialreport/store2', [FilesController::class, 'store2']);
-Route::get('/deleteFile2/{id}', [FilesController::class, 'deletefile2']);
+// Route::get('/financialreport', [FilesController::class, 'financialreport']);
+// Route::get('create2', [FilesController::class, 'create2']);
+// Route::post('/financialreport/store2', [FilesController::class, 'store2']);
+// Route::get('/deleteFile2/{id}', [FilesController::class, 'deletefile2']);
 
 //Blotter Record
-Route::get('/blotterrecord', [FilesController::class, 'blotterrecord']);
-Route::get('create3', [FilesController::class, 'create3']);
-Route::post('/blotterrecord/store3', [FilesController::class, 'store3']);
-Route::get('/deleteFile3/{id}', [FilesController::class, 'deletefile3']);
+// Route::get('/blotterrecord', [FilesController::class, 'blotterrecord']);
+// Route::get('create3', [FilesController::class, 'create3']);
+// Route::post('/blotterrecord/store3', [FilesController::class, 'store3']);
+// Route::get('/deleteFile3/{id}', [FilesController::class, 'deletefile3']);
 
 // Route::get('/reports', 'AdminSide\FilesController@reports')->name('admin.reports');
 // Route::get('create', 'AdminSide\FilesController@create')->name('admin.create');

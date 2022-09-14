@@ -25,13 +25,13 @@ class DatabaseSeeder extends Seeder
     //     'email' => 'test@example.com'
     // ]);
 
-    // barangayOfficial::factory(20)->create();
-    // AdminResidents::factory(20)->create();
+    barangayOfficial::factory(20)->create();
+    AdminResidents::factory(20)->create();
 
-    // settings::create([
-    //   'barangay_name' => 'Barangay Name',
-    //   'barangay_logo' => '/assets/imageee.png'
-    // ]);
+    settings::create([
+      'barangay_name' => 'Barangay Name',
+      'barangay_logo' => '/assets/imageee.png'
+    ]);
 
     \App\Models\ActivityLog::factory(50)->create();
   }

@@ -16,7 +16,8 @@ class File extends Model
     'user_id',
     'name',
     'type',
-    'size'
+    'size',
+    'category'
   ];
 
   use HasFactory;

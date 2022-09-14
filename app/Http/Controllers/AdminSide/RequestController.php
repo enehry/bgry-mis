@@ -25,6 +25,7 @@ class RequestController extends Controller
 
   public function viewPayment($id)
   {
+
     $req = RequestCertificate::find($id);
     return view('admin.certificate', ['req' => $req]);
   }

@@ -12,129 +12,146 @@ use App\Http\Requests\StoreFileRequest;
 
 class FilesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *  
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * Display a listing of the resource.
+   *  
+   * @return \Illuminate\Http\Response
+   */
 
-    /**Accomplishment Report*/
-    public function reports(){
-        $files = File::all();
-        return view('admin.reports', ['files' => $files]);
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  /**Accomplishment Report*/
+  public function reports($category)
+  {
 
-    public function create(){
-        return view('admin.create');
-    }
+    $files = File::where('category', '=', $category ?? 'accomplishment')->get();
 
-    public function deletefile($id) {
-        $file=File::find($id);
-        $file->delete();
-    
-        return back()->with('message', 'File Deleted');
-    
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  StoreFileRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreFileRequest $request){
-        $fileName = $request->file->getClientOriginalName();   
+    return view('admin.reports', ['files' =>  $files, 'category' => $category]);
+  }
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
 
-        $type = $request->file->getClientMimeType();
-        $size = $request->file->getSize();
+  public function create()
+  {
+    return view('admin.create');
+  }
 
-        $request->file->move(public_path('file'), $fileName);
+  public function deletefile($id)
+  {
 
-        File::create([
-            // 'user_id' => auth()->id(),
-            'name' => $fileName,
-            'type' => $type,
-            'size' => $size
-        ]);
+    $file = File::find($id);
+    $file->delete();
+    return back()->with('message', 'File Deleted');
+  }
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  StoreFileRequest  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(StoreFileRequest $request, $category)
+  {
+    $fileName = $request->file->getClientOriginalName();
 
-        return redirect('/reports')->withSuccess(__('File added successfully.'));
-    }
+    $type = $request->file->getClientMimeType();
+    $size = $request->file->getSize();
 
-    public function download(Request $request,$file){
-        return response()->download(public_path('assets/'.$file));
-    }
+    // rename the file
+    $fileName = md5(uniqid()) . '_' . $fileName;
 
-    public function viewFile($id){
-        $file = File::find($id);
-        return view('admin.file', ['file'=>$file]);
-    }
+    $request->file->move(public_path('file'), $fileName);
 
-    /*For Financial Report */
-    public function financialreport(){
-        $files2 = FinancialReport::all();
-        return view('admin.financialreport', ['files2' => $files2]);
-    }
+    File::create([
+      // 'user_id' => auth()->id(),
+      'category' => $category,
+      'name' => $fileName,
+      'type' => $type,
+      'size' => $size,
+    ]);
 
-    public function create2(){
-        return view('admin.create2');
-    }
-        
-    public function deletefile2($id){
-        $file2=FinancialReport::find($id);
-        $file2->delete();
-        return back()->with('message', 'File Deleted');
-    }
+    return back()->withSuccess(__('File added successfully.'));
+  }
 
-    public function store2(StoreFileRequest $request){
-        $fileName = $request->file->getClientOriginalName();   
-        $type = $request->file->getClientMimeType();
-        $size = $request->file->getSize();
-        $request->file->move(public_path('file'), $fileName);
+  public function download(Request $request, $file)
+  {
+    return response()->download(public_path('assets/' . $file));
+  }
 
-        FinancialReport::create([
-            // 'user_id' => auth()->id(),
-            'name' => $fileName,
-            'type' => $type,
-            'size' => $size
-        ]);
+  public function viewFile($id)
+  {
+    $file = File::find($id);
+    return view('admin.file', ['file' => $file]);
+  }
 
-        return redirect('/financialreport')->withSuccess(__('File added successfully.'));
-    }
-        /*For Blotter Records */
-        public function blotterrecord(){
-            $files3 = BlotterRecords::all();
-            return view('admin.blotterrecord', ['files3' => $files3]);
-        }
-    
-        public function create3(){
-            return view('admin.create3');
-        }
-            
-        public function deletefile3($id){
-            $file3=BlotterRecords::find($id);
-            $file3->delete();
-            return back()->with('message', 'File Deleted');
-        }
-    
-        public function store3(StoreFileRequest $request){
-            $fileName = $request->file->getClientOriginalName();   
-            $type = $request->file->getClientMimeType();
-            $size = $request->file->getSize();
-            $request->file->move(public_path('file'), $fileName);
-    
-            BlotterRecords::create([
-                // 'user_id' => auth()->id(),
-                'name' => $fileName,
-                'type' => $type,
-                'size' => $size
-            ]);
-    
-            return redirect('/blotterrecord')->withSuccess(__('File added successfully.'));
-        }
-    
+  /*For Financial Report */
+  public function financialreport()
+  {
+    $files2 = FinancialReport::all();
+    return view('admin.financialreport', ['files2' => $files2]);
+  }
+
+  public function create2()
+  {
+    return view('admin.create2');
+  }
+
+  public function deletefile2($id)
+  {
+    $file2 = FinancialReport::find($id);
+    $file2->delete();
+    return back()->with('message', 'File Deleted');
+  }
+
+  public function store2(StoreFileRequest $request)
+  {
+    $fileName = $request->file->getClientOriginalName();
+    $type = $request->file->getClientMimeType();
+    $size = $request->file->getSize();
+    $request->file->move(public_path('file'), $fileName);
+
+    FinancialReport::create([
+      // 'user_id' => auth()->id(),
+      'name' => $fileName,
+      'type' => $type,
+      'size' => $size
+    ]);
+
+    return redirect('/financialreport')->withSuccess(__('File added successfully.'));
+  }
+  /*For Blotter Records */
+  public function blotterrecord()
+  {
+    $files3 = BlotterRecords::all();
+    return view('admin.blotterrecord', ['files3' => $files3]);
+  }
+
+  public function create3()
+  {
+    return view('admin.create3');
+  }
+
+  public function deletefile3($id)
+  {
+    $file3 = BlotterRecords::find($id);
+    $file3->delete();
+    return back()->with('message', 'File Deleted');
+  }
+
+  public function store3(StoreFileRequest $request)
+  {
+    $fileName = $request->file->getClientOriginalName();
+    $type = $request->file->getClientMimeType();
+    $size = $request->file->getSize();
+    $request->file->move(public_path('file'), $fileName);
+
+    BlotterRecords::create([
+      // 'user_id' => auth()->id(),
+      'name' => $fileName,
+      'type' => $type,
+      'size' => $size
+    ]);
+
+    return redirect('/blotterrecord')->withSuccess(__('File added successfully.'));
+  }
 }
- 

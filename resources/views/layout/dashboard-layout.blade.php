@@ -83,13 +83,13 @@
           </a>
           <ul class="collapse list-unstyled pl-4 w-100" id="reports">
             <li class="nav-item">
-              <a class="nav-link pl-3" href="/reports"><span class="ml-1 item-text">Accomplishment Report</span></a>
+              <a class="nav-link pl-3" href="../reports/accomplishment"><span class="ml-1 item-text">Accomplishment Report</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pl-3" href="/financialreport"><span class="ml-1 item-text">Financial Report</span></a>
+              <a class="nav-link pl-3" href="../reports/financial"><span class="ml-1 item-text">Financial Report</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pl-3" href="/blotterrecord"><span class="ml-1 item-text">Blotter Report</span></a>
+              <a class="nav-link pl-3" href="../reports/blotter"><span class="ml-1 item-text">Blotter Report</span></a>
             </li>
           </ul>
         </li>

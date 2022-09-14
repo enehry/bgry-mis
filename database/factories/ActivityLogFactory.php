@@ -19,7 +19,7 @@ class ActivityLogFactory extends Factory
     return [
       //
       'user_id' => $this->faker->numberBetween(1, 10),
-      'action' => $this->faker->paragraph(),
+      'action' => $this->faker->paragraph(2),
       'table_name' => $this->faker->word,
       'table_id' => $this->faker->numberBetween(1, 10),
     ];
