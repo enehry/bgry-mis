@@ -9,6 +9,7 @@ class RequestCertificate extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'admin_resident_id',
         'fullname',
         'docType',
         'date',
