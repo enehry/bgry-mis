@@ -29,8 +29,14 @@ use App\Http\Controllers\AdminSide\RequestController;
 
 Route::get('/', function () {
   return view('welcome');
-});
+})->name('welcome')->middleware('guest');
 
+// !! IMPORTANT: You should add all the route that are related to the admin side
+// !! to protect if from public.
+Route::middleware(['brgy_official'])->group(function () {
+  //Admin Dashboard
+  Route::get('dashboard', [AdminResidentsController::class, 'dashboard']);
+});
 
 // // Barangay Clearance
 // Route::get('/brgyClearance', [CertificateController::class, 'brgyClearance']);
@@ -99,8 +105,7 @@ Route::get('/deleteBarangayOfficial/{id}', [BarangayOfficialController::class, '
 //View Residents in Admin 
 Route::get('/viewResidents/{id}', [AdminResidentsController::class, 'viewResidents']);
 
-//Admin Dashboard
-Route::get('dashboard', [AdminResidentsController::class, 'dashboard']);
+
 
 //Admin Residents  Form
 Route::get('/residents', [AdminResidentsController::class, 'residents']);

@@ -36,13 +36,14 @@ return [
     */
 
   'guards' => [
-    'barangay_official' => [
-      'driver' => 'session',
-      'provider' => 'barangayOfficial',
-    ],
+
     'web' => [
       'driver' => 'session',
       'provider' => 'users',
+    ],
+    'barangay_official' => [
+      'driver' => 'session',
+      'provider' => 'barangay_official',
     ],
 
   ],
@@ -65,7 +66,7 @@ return [
     */
 
   'providers' => [
-    'barangayOfficial' => [
+    'barangay_official' => [
       'driver' => 'eloquent',
       'model' => App\Models\barangayOfficial::class,
     ],
