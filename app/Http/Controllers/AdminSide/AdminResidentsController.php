@@ -207,6 +207,8 @@ class AdminResidentsController extends Controller
       'password' => 'required',
     ]);
 
+
+
     $residents = AdminResidents::where('email', '=', $request->email)->first();
     if ($residents) {
       if (Hash::check($request->password, $residents->password)) {

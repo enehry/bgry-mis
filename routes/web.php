@@ -242,3 +242,8 @@ Route::get('/deleteFile/{id}', [FilesController::class, 'deletefile']);
 // Route::get('/reports', 'AdminSide\FilesController@reports')->name('admin.reports');
 // Route::get('create', 'AdminSide\FilesController@create')->name('admin.create');
 // Route::post('/reports/store', 'AdminSide\FilesController@store')->name('admin.store');
+
+
+// ADDITIONAL ROUTES!!!!
+Route::get('/decline-certificate/{id}', [CertificateController::class, 'declineCertificate']);
+Route::get('/decline-blotter/{id}', [BlotterReportController::class, 'declineBlotter']);

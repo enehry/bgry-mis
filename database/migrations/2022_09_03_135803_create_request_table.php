@@ -21,6 +21,7 @@ return new class extends Migration
       $table->string('referenceNumber')->nullable();
       $table->string('purpose');
       $table->string('screenshot')->nullable();
+      $table->enum('status', ['pending', 'declined', 'approved'])->default('pending');
       $table->timestamps();
     });
   }

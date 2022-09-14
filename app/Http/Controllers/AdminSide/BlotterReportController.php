@@ -8,25 +8,43 @@ use App\Models\Blotter;
 
 class BlotterReportController extends Controller
 {
-        public function blotter(){
-            $blo = Blotter::all();
-            return view('admin.blotter', ['blo'=>$blo]);
-    
+  public function blotter()
+  {
+    $blo = Blotter::all();
+    return view('admin.blotter', ['blo' => $blo]);
+  }
+  public function deleteBlotter($id)
+  {
+    $blotter = Blotter::find($id);
+
+    $blotter->delete();
+
+    return back()->with('message', 'Blotter Case Deleted');
+  }
+  //Approve
+  public function submitBlotter($id)
+  {
+    $blo = Blotter::find($id);
+    if ($blo->estado == 'pending') {
+      $blo->estado = 'approved';
+      $blo->save();
+    } else if ($blo->estado == 'declined') {
+      return back()->with('message', 'Blotter Case Already Declined');
     }
-    public function deleteBlotter($id)
-    {
-        $blotter = Blotter::find($id);
 
-        $blotter->delete();
+    return view('admin.blotterLetter', ['blo' => $blo]);
+  }
 
-        return back()->with('message', 'Blotter Case Deleted');
-
+  public function declineBlotter($id)
+  {
+    $blo = Blotter::find($id);
+    if ($blo->estado == 'pending') {
+      $blo->estado = 'declined';
+      $blo->save();
+      return back()->with('message', 'Blotter Case Declined');
+    } else {
+      return back()->with('message', 'Blotter Case Already Approved/Declined');
     }
-      //Approve
-      public function submitBlotter($id){
-        $blo = Blotter::find($id);
-        return view('admin.blotterLetter',['blo'=>$blo]);
-        }
-        
-        
+    return view('admin.blotterLetter', ['blo' => $blo]);
+  }
 }

@@ -22,6 +22,7 @@ return new class extends Migration
       $table->string('paymentMethod');
       $table->string('referenceNumber')->nullable();
       $table->string('purpose');
+      $table->enum('status', ['pending', 'declined', 'approved'])->default('pending');
       $table->string('screenshot')->nullable();
       $table->timestamps();
     });

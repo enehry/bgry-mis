@@ -11,33 +11,66 @@ use Illuminate\Http\Request;
 
 class CertificateController extends Controller
 {
-  public function certificateOfResidency()
+  public function certificateOfResidency(Request $request)
   {
-    $res = RequestCertificate::all()->where('doctype', '=', 'Certificate of Residency');
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+    ]);
+
+    $res = RequestCertificate::where('doctype', '=', 'Certificate of Residency')
+      ->when($request->search, function ($query) use ($request) {
+        return $query->where('fullname', 'like', '%' . $request->search . '%');
+      })->get();
     return view('admin.certificateOfResidency', ['res' => $res]);
   }
 
-  public function certificateOfIndigency()
+  public function certificateOfIndigency(Request $request)
   {
-    $ind = RequestCertificate::all()->where('doctype', '=', 'Certificate of Indigency');
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+    ]);
+    $ind = RequestCertificate::where('doctype', '=', 'Certificate of Indigency')
+      ->when($request->search, function ($query) use ($request) {
+        return $query->where('fullname', 'like', '%' . $request->search . '%');
+      })->get();
     return view('admin.certificateOfIndigency', ['ind' => $ind]);
   }
 
-  public function certificateOfClearance()
+  public function certificateOfClearance(Request $request)
   {
-    $clear = RequestCertificate::all()->where('doctype', '=', 'Barangay Clearance');
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+    ]);
+    $clear = RequestCertificate::where('doctype', '=', 'Barangay Clearance')
+      ->when($request->search, function ($query) use ($request) {
+        return $query->where('fullname', 'like', '%' . $request->search . '%');
+      })->get();
     return view('admin.certificateOfClearance', ['clear' => $clear]);
   }
 
   public function barangayClearance($id)
   {
-    $cer = AdminResidents::find($id);
+    $certificate = RequestCertificate::find($id);
+    if ($certificate->status == 'pending') {
+      $certificate->status = 'approved';
+      $certificate->save();
+    } else if ($certificate->status == 'declined') {
+      return redirect()->back()->with('success', 'Request is already declined');
+    }
+    $cer =  $certificate->admin_resident;
     return view('admin.barangayClearance', ['cer' => $cer]);
   }
 
   public function barangayResidency($id)
   {
-    $cer = AdminResidents::find($id);
+    $certificate = RequestCertificate::find($id);
+    if ($certificate->status == 'pending') {
+      $certificate->status = 'approved';
+      $certificate->save();
+    } else if ($certificate->status == 'declined') {
+      return redirect()->back()->with('success', 'Request is already declined');
+    }
+    $cer =  $certificate->admin_resident;
     return view('admin.barangayResidency', ['cer' => $cer]);
   }
 
@@ -45,8 +78,18 @@ class CertificateController extends Controller
   {
     // $cer = AdminResidents::find($id);
     // return view('admin.barangayIndigency', ['cer' => $cer]);
-    dd($id);
-    $cer = AdminResidents::find($id);
+
+    $certificate = RequestCertificate::find($id);
+    if ($certificate->status == 'pending') {
+      $certificate->status = 'approved';
+      $certificate->save();
+    } else if ($certificate->status == 'declined') {
+      return redirect()->back()->with('success', 'Request is already declined');
+    }
+    $cer =  $certificate->admin_resident;
+
+
+
     return view('admin.barangayIndigency', ['cer' => $cer]);
   }
 
@@ -94,5 +137,16 @@ class CertificateController extends Controller
     }
     $certificate->update($formFields);
     return back()->with('message', 'Update Successful');
+  }
+
+  // PANG DECLINED NG CERTIFICATE
+  public function declineCertificate($id)
+  {
+    $certificate = RequestCertificate::find($id);
+    if ($certificate->status == 'pending') {
+      $certificate->status = 'declined';
+      $certificate->save();
+    }
+    return back()->with('message', 'Request Declined');
   }
 }

@@ -25,7 +25,7 @@ class AdminResidentsFactory extends Factory
       'place_of_birth' => fake()->city(),
       'birthdate' => fake()->date(),
       'age' => fake()->numberBetween(18, 65),
-      'civil_status' =>  fake()->randomElement(['Married, Widowed, Single']),
+      'civil_status' => fake()->randomElement(['Married', 'Widowed', 'Single']),
       'street' => fake()->streetName(),
       'gender' => fake()->randomElement(['Male', 'Female']),
       'voter_status' => fake()->randomElement(['Active', 'Inactive']),

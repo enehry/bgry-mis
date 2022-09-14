@@ -11,7 +11,7 @@ class ActivityLog
   public static function log($table_name, $action, $table_id)
   {
     $log = new ModelsActivityLog();
-    $log->user_id = Auth::user()->id;
+    $log->user_id = Auth::user()->id ?? 0;
     $log->table_name = $table_name;
     $log->action = $action;
     $log->table_id = $table_id;

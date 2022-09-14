@@ -6,35 +6,37 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('blotters', function (Blueprint $table) {
-            $table->id();
-            $table->string('complainant');
-            $table->string('respondent');
-            $table->string('victim');
-            // $table->string('type');
-            $table->string('location');
-            $table->string('date');
-            $table->string('time');
-            $table->string('details');
-            $table->string('status');
-            $table->timestamps();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::create('blotters', function (Blueprint $table) {
+      $table->id();
+      $table->string('complainant');
+      $table->string('respondent');
+      $table->string('victim');
+      // $table->string('type');
+      $table->string('location');
+      $table->string('date');
+      $table->string('time');
+      $table->string('details');
+      $table->string('status');
+      $table->enum('estado', ['pending', 'approved', 'declined'])->default('pending');
+      $table->softDeletes();
+      $table->timestamps();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('blotters');
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::dropIfExists('blotters');
+  }
 };

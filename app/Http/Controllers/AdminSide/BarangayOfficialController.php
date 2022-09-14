@@ -122,8 +122,6 @@ class BarangayOfficialController extends Controller
 
 
     if (Auth::guard('barangay_official')->attempt($credentials)) {
-
-      $request->session()->regenerate();
       Auth::login(Auth::guard('barangay_official')->user());
       ActivityLog::log(
         'barangay_officials',
@@ -141,18 +139,18 @@ class BarangayOfficialController extends Controller
   public function logout(Request $request)
   {
 
-    // ActivityLog::log(
-    //   'barangay_officials',
-    //   'Logged out barangay official with id ' . Auth::guard('barangay_official')->user()->id . ' ' . Auth::guard('barangay_official')->user()->name,
-    //   Auth::guard('barangay_official')->user()->id,
-    // );
+    ActivityLog::log(
+      'barangay_officials',
+      'Logged out barangay official with id ' . Auth::guard('barangay_official')->user()->id . ' ' . Auth::guard('barangay_official')->user()->name,
+      Auth::guard('barangay_official')->user()->id,
+    );
 
     // logout all sessions
     Auth::guard('barangay_official')->logout();
     Auth::logout();
 
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+    // $request->session()->invalidate();
+    // $request->session()->regenerateToken();
 
     return redirect('/')->with('message', ' Youre Logout');
   }

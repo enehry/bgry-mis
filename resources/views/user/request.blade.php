@@ -106,9 +106,12 @@
         </div>
       </div>
       <div class="col-md-6" style="margin-top: 20px; margin-bottom: 20px;">
-        <label for="fullname">Type Your Full Name</label>
-        <input type="text" class="form-control" name="fullname" value="" placeholder="Type your full name">
-
+        <label for="first_name">Type Your First Name</label>
+        <input type="text" class="form-control" name="first_name" value="" placeholder="Type your first name">
+        <label for="middle_name">Type Your Middle Name</label>
+        <input type="text" class="form-control" name="middle_name" value="" placeholder="Type your middle name">
+        <label for="last_name">Type Your Last Name</label>
+        <input type="text" class="form-control" name="last_name" value="" placeholder="Type your last name">
         <!-- Type of Document -->
         <div class="form-group">
           <label for="exampleFormControlSelect1">Type of Document</label>

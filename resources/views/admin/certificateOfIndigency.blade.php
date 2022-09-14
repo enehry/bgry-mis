@@ -29,14 +29,22 @@
         <tr>
           <td>
             <div class="image-round">
-              <img class="imagePreview" src="{{$indigency->profile_image ? asset ('storage/' .$indigency->profile_image) : asset('/storage/images/-image.png')}}" alt="" />
+              <img class="imagePreview" src="{{$indigency->profile_image ? asset ('storage/' .$indigency->profile_image) : asset('/images/-image.png')}}" alt="" />
             </div>
           </td>
-          <td class="show"> {{$indigency->fullname}}</td>
-          <td class="show">{{$indigency->doctype}}</td>
-          <td class="show"><?= date('F j, Y, g:i a') ?></td>
+          <td class="show"> {{ $indigency->fullname}}</td>
+          <td class="show">{{ $indigency->doctype}}</td>
+          <td class="show">{{ Carbon\Carbon::parse($indigency->created_at)->format('d-m-Y h:m') }}</td>
           <td>
+            @if($indigency->status == 'pending')
             <a href="#editIndigencyModal{{$indigency->id}}" class="edit" data-toggle="modal"><button class="btn"><i class="fas fa-eye fa-minimize"></i></button></a>
+            @elseif($indigency->status == 'approved')
+            <a href="{{url('certificateOfIndigency/barangayIndigency/'.$indigency->id)}}">
+              <span class="badge badge-success p-2">Approved</span>
+            </a>
+            @elseif($indigency->status == 'declined')
+            <span class="badge badge-danger p-2">Declined</span>
+            @endif
           </td>
 
         </tr>
@@ -73,16 +81,17 @@
                   <input type="text" class="form-control" name="date" value="{{$indigency->referenceNumber}}" disabled>
                 </div>
                 <div class="form-group">
+                  @if($indigency->screenshot)
                   <label>Screenshot of Proof</label>
-                  <div id="image-show-area">
-                    <img src="{{$indigency->screenshot ? asset ('storage/' .$indigency->screenshot) : asset('/storage/images/-image.png')}}" alt="screenshot" style="width: 100%" />
+                  <div id="image-show-area image-fluid">
+                    <img src="{{ asset ('screenshot/' .$indigency->screenshot)}}" alt="screenshot" style="width: 100%" />
                   </div>
+                  @endif
                 </div>
                 <div class="modal-footer">
                   <input type="hidden" name="name" value="---">
-                  <a class="btn btn-danger" class="close" data-dismiss="modal" aria-label="Close">Decline</a>
-                  {{$indigency}}
-                  <a href="{{url('certificateOfIndigency/barangayIndigency/'.$indigency->admin_resident_id)}}" type="submit" class="btn btn-primary">Approve</a>
+                  <a href="{{url('decline-certificate/'.$indigency->id)}}" class="btn btn-danger" class="close">Decline</a>
+                  <a href="{{url('certificateOfIndigency/barangayIndigency/'.$indigency->id)}}" type="submit" class="btn btn-primary">Approve</a>
                 </div>
 
               </div>
