@@ -95,4 +95,5 @@ class CertificateController extends Controller
         $certificate->update($formFields);
         return back()->with('message', 'Update Successful');
     }
+
 }

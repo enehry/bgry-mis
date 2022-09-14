@@ -28,7 +28,7 @@ use App\Http\Controllers\AdminSide\RequestController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+  return view('welcome');
 });
 
 
@@ -51,7 +51,7 @@ Route::get('/deleteRequest/{id}', [CertificateController::class, 'deleteRequest'
 
 Route::get('/home', [HomeController::class, 'home']);
 Route::get('/adminLoginPage', function () {
-    return view('adminLoginPage');
+  return view('adminLoginPage');
 });
 
 //Homepage Client-Side
@@ -215,7 +215,7 @@ Route::get('create', [FilesController::class, 'create']);
 Route::post('/reports/store', [FilesController::class, 'store']);
 Route::get('/deleteFile/{id}', [FilesController::class, 'deletefile']);
 Route::get('reports/viewFile', [FilesController::class, 'viewFile']);
-Route::get('/download/{file}',[FilesController::class,'download']);
+Route::get('/download/{file}', [FilesController::class, 'download']);
 
 //Financial
 Route::get('/financialreport', [FilesController::class, 'financialreport']);
@@ -232,4 +232,3 @@ Route::get('/deleteFile3/{id}', [FilesController::class, 'deletefile3']);
 // Route::get('/reports', 'AdminSide\FilesController@reports')->name('admin.reports');
 // Route::get('create', 'AdminSide\FilesController@create')->name('admin.create');
 // Route::post('/reports/store', 'AdminSide\FilesController@store')->name('admin.store');
-

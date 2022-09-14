@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminSide;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Helper\ActivityLog;
+use App\Models\ActivityLog as ModelsActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\AdminResidents;
@@ -118,8 +119,29 @@ class UserController extends Controller
     return redirect('/residents')->with('message', 'Residents Registration Accepted');
   }
 
-  public function activityLog()
+  public function activityLog(Request $request)
   {
-    return view('admin.activitylog');
+
+    $request->validate([
+      'search' => 'nullable|string',
+      'perPage' => 'nullable|integer',
+      'page' => 'nullable|integer',
+      'sortBy' => 'nullable|string',
+    ]);
+
+    $perPage = $request->perPage ?? 10;
+    $sort = explode(' ',  $request->sortBy ?? 'created_at desc');
+    $column = $sort[0];
+    $direction = $sort[1];
+
+    $logs = ModelsActivityLog::when($request->search, function ($query, $search) {
+      return $query->where('action', 'like', '%' . $search . '%');
+    })
+      ->orderBy($column, $direction)
+      ->paginate($perPage);
+
+
+
+    return view('admin.activitylog', ['logs' => $logs]);
   }
 }
