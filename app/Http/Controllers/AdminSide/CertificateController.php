@@ -17,8 +17,15 @@ class CertificateController extends Controller
     $request->validate([
       'search' => 'nullable|string|max:255',
     ]);
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+      'status' => 'nullable|string|in:pending,approved,declined',
+    ]);
+
+    $status = $request->status ?? 'pending';
 
     $res = RequestCertificate::where('doctype', '=', 'Certificate of Residency')
+      ->where('status', '=', $status)
       ->when($request->search, function ($query) use ($request) {
         return $query->where('fullname', 'like', '%' . $request->search . '%');
       })->get();
@@ -29,8 +36,12 @@ class CertificateController extends Controller
   {
     $request->validate([
       'search' => 'nullable|string|max:255',
+      'status' => 'nullable|string|in:pending,approved,declined',
     ]);
+
+    $status = $request->status ?? 'pending';
     $ind = RequestCertificate::where('doctype', '=', 'Certificate of Indigency')
+      ->where('status', '=', $status)
       ->when($request->search, function ($query) use ($request) {
         return $query->where('fullname', 'like', '%' . $request->search . '%');
       })->get();
@@ -41,8 +52,13 @@ class CertificateController extends Controller
   {
     $request->validate([
       'search' => 'nullable|string|max:255',
+      'status' => 'nullable|string|in:pending,approved,declined',
     ]);
+
+    $status = $request->status ?? 'pending';
+
     $clear = RequestCertificate::where('doctype', '=', 'Barangay Clearance')
+      ->where('status', $status)
       ->when($request->search, function ($query) use ($request) {
         return $query->where('fullname', 'like', '%' . $request->search . '%');
       })->get();
@@ -51,6 +67,8 @@ class CertificateController extends Controller
 
   public function barangayClearance($id)
   {
+
+
     $certificate = RequestCertificate::find($id);
     if ($certificate->status == 'pending') {
       $certificate->status = 'approved';

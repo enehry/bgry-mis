@@ -8,8 +8,24 @@
         <div class="form-row">
           <div action="/residents" class="form-group col-auto">
             <label for="search" class="sr-only">Search</label>
-            <input type="text" class="form-control" id="search" name="search" value="" placeholder="Search">
+            <input type="text" class="form-control" id="search" name="search" value="{{\Request::get('search')}}" placeholder="Search">
           </div>
+          <div class="form-group col-auto">
+            <label for="category" class="sr-only">Status</label>
+            <select class="form-control" id="status" name="status">
+              <option disabled>Select Status</option>
+              <option value="pending" {{\Request::get('status') === 'pending' ? 'selected' : ''}}>Pending</option>
+              <option value="approved" {{\Request::get('status') === 'approved' ? 'selected' : ''}}>Approved</option>
+              <option value="declined" {{\Request::get('status') === 'declined' ? 'selected' : ''}}>Declined</option>
+            </select>
+          </div>
+          <script>
+            $(document).ready(function() {
+              $('#status').change(function() {
+                this.form.submit();
+              });
+            });
+          </script>
         </div>
       </form>
     </div>

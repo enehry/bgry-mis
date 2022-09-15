@@ -83,6 +83,7 @@ class AdminResidentsController extends Controller
   //Search Residents
   public function search_residents(Request $request)
   {
+
     return view('Admin.residents', [
       'resident' => AdminResidents::latest()->filter(request(['search']))->paginate(5)
     ]);
@@ -126,6 +127,7 @@ class AdminResidentsController extends Controller
       'admin_residents',
       $adminResidents->id
     );
+
 
     return redirect('/residents')->with('message', 'User Created Successfuly');
   }

@@ -58,6 +58,7 @@ Route::get('/deleteRequest/{id}', [CertificateController::class, 'deleteRequest'
 Route::get('/home', [HomeController::class, 'home']);
 Route::get('/adminLoginPage', function () {
   return view('adminLoginPage');
+  // Auth::guard('brgy_official')->user();
 });
 
 //Homepage Client-Side
