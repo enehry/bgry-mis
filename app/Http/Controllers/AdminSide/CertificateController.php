@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminSide;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helper\ActivityLog;
 use App\Models\AdminResidents;
 use App\Models\barangayOfficial;
 use App\Models\Certificate;
@@ -54,6 +55,11 @@ class CertificateController extends Controller
     if ($certificate->status == 'pending') {
       $certificate->status = 'approved';
       $certificate->save();
+      ActivityLog::log(
+        'approved barangay' . $certificate->doctype  . ' with id ' . $certificate->id . ' ' . $certificate->fullname,
+        'certificate',
+        $certificate->id,
+      );
     } else if ($certificate->status == 'declined') {
       return redirect()->back()->with('success', 'Request is already declined');
     }
@@ -67,6 +73,12 @@ class CertificateController extends Controller
     if ($certificate->status == 'pending') {
       $certificate->status = 'approved';
       $certificate->save();
+
+      ActivityLog::log(
+        'approved barangay' . $certificate->doctype  . ' with id ' . $certificate->id . ' ' . $certificate->fullname,
+        'certificate',
+        $certificate->id,
+      );
     } else if ($certificate->status == 'declined') {
       return redirect()->back()->with('success', 'Request is already declined');
     }
@@ -83,6 +95,12 @@ class CertificateController extends Controller
     if ($certificate->status == 'pending') {
       $certificate->status = 'approved';
       $certificate->save();
+
+      ActivityLog::log(
+        'approved barangay' . $certificate->doctype  . ' with id ' . $certificate->id . ' ' . $certificate->fullname,
+        'certificate',
+        $certificate->id,
+      );
     } else if ($certificate->status == 'declined') {
       return redirect()->back()->with('success', 'Request is already declined');
     }
@@ -99,7 +117,15 @@ class CertificateController extends Controller
   {
     $cer = RequestCertificate::find($id);
 
+
+
     $cer->delete();
+
+    ActivityLog::log(
+      'deleted request ' . $cer->doctype . ' with id ' . $cer->id . ' ' . $cer->fullname,
+      'certificate',
+      $cer->id,
+    );
 
     return back()->with('message', 'Request Deleted');
   }
@@ -146,6 +172,12 @@ class CertificateController extends Controller
     if ($certificate->status == 'pending') {
       $certificate->status = 'declined';
       $certificate->save();
+
+      ActivityLog::log(
+        'declined ' . $certificate->doctype . ' with id ' . $certificate->id . ' ' . $certificate->fullname,
+        'certificate',
+        $certificate->id,
+      );
     }
     return back()->with('message', 'Request Declined');
   }

@@ -13,7 +13,7 @@ use App\Http\Controllers\AdminSide\FilesController;
 use App\Http\Controllers\AdminSide\CertificateController;
 use App\Http\Controllers\AdminSide\UploadFileController;
 use App\Http\Controllers\AdminSide\RequestController;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ Route::middleware(['brgy_official'])->group(function () {
   Route::get('dashboard', [AdminResidentsController::class, 'dashboard']);
 });
 
-// // Barangay Clearance
+// Barangay Clearance
 // Route::get('/brgyClearance', [CertificateController::class, 'brgyClearance']);
 
 //Request
@@ -247,3 +247,9 @@ Route::get('/deleteFile/{id}', [FilesController::class, 'deletefile']);
 // ADDITIONAL ROUTES!!!!
 Route::get('/decline-certificate/{id}', [CertificateController::class, 'declineCertificate']);
 Route::get('/decline-blotter/{id}', [BlotterReportController::class, 'declineBlotter']);
+
+
+Route::get('logout-all', function () {
+  Auth::logout();
+  return redirect('/');
+});

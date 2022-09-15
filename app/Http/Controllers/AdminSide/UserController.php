@@ -51,8 +51,8 @@ class UserController extends Controller
     $registration = ResidentsRegistration::create($formFields);
 
     ActivityLog::log(
-      'residents_registrations',
       'created residents registration with id ' . $registration->id . ' ' . $registration->first_name,
+      'residents_registrations',
       $registration->id,
     );
 
@@ -110,8 +110,8 @@ class UserController extends Controller
     $reg = AdminResidents::create($formFields);
 
     ActivityLog::log(
+      'created admin residents with id ' . $reg->id . ' ' . $reg->first_name,
       'admin_residents',
-      'Created admin residents with id ' . $reg->id . ' ' . $reg->first_name,
       $reg->id,
     );
 

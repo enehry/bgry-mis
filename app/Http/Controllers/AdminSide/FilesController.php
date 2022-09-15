@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\AdminSide;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helper\ActivityLog;
 use App\Models\File;
 use App\Models\BlotterRecords;
 use App\Models\FinancialReport;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Http\Requests\StoreFileRequest;
+use Illuminate\Support\Facades\Auth;
 
 class FilesController extends Controller
 {
@@ -19,10 +21,17 @@ class FilesController extends Controller
    */
 
   /**Accomplishment Report*/
-  public function reports($category)
+  public function reports(Request $request, $category)
   {
+    $request->validate([
+      'show' => 'nullable|string|in:yes,no',
+    ]);
 
-    $files = File::where('category', '=', $category ?? 'accomplishment')->get();
+    $files = File::where('category', '=', $category ?? 'accomplishment')
+      ->when($request->show == 'yes', function ($query) {
+        return $query->onlyTrashed();
+      })
+      ->get();
 
     return view('admin.reports', ['files' =>  $files, 'category' => $category]);
   }
@@ -39,9 +48,15 @@ class FilesController extends Controller
 
   public function deletefile($id)
   {
-
     $file = File::find($id);
     $file->delete();
+
+    ActivityLog::log(
+      'deleted file with id ' . $file->id . ' ' . $file->name,
+      'files',
+      $file->id,
+    );
+
     return back()->with('message', 'File Deleted');
   }
   /**
@@ -62,13 +77,21 @@ class FilesController extends Controller
 
     $request->file->move(public_path('file'), $fileName);
 
-    File::create([
+
+
+    $file = File::create([
       // 'user_id' => auth()->id(),
       'category' => $category,
       'name' => $fileName,
       'type' => $type,
       'size' => $size,
     ]);
+
+    ActivityLog::log(
+      'uploaded a file ' . $fileName,
+      'files',
+      $file->id
+    );
 
     return back()->withSuccess(__('File added successfully.'));
   }

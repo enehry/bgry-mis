@@ -83,15 +83,11 @@ class RequestController extends Controller
       'paymentMethod' => $request->paymentMethod,
       'referenceNumber' => $request->referenceNumber,
       'purpose' => $request->purpose,
-      'screenshot' => $fileName,
+      'screenshot' => $fileName ?? null,
       'admin_resident_id' => $check->id,
     ]);
 
-    ActivityLog::log(
-      'request_certificates',
-      'Created request certificate with id ' . $certificate->id . ' ' . $certificate->fullname,
-      $certificate->id,
-    );
+
 
     return back()->with('message', 'Request Certificate Successful');
   }
@@ -114,6 +110,12 @@ class RequestController extends Controller
       'status'        => 'required',
     ]);
     $blotter = Blotter::create($formFields);
+
+    ActivityLog::log(
+      'created blotter with id ' . $blotter->id . ' complainant ' . $blotter->complainant,
+      'blotters',
+      $blotter->id,
+    );
 
     return back()->with('message', 'Successfully Reported');
   }

@@ -89,7 +89,7 @@
 <div class="row">
   <!-- Small table -->
   <div class="col-md-12 my-4">
-    <h2 class="h4 mb-1">Accomplishment Records</h2>
+    <h2 class="h4 mb-1">{{ ucfirst($category) }} Records</h2>
     {{-- <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa print"></i></a> --}}
     <div class="card shadow">
       <div class="card-body">
@@ -102,7 +102,23 @@
           <input type="file" class="mb-3" name="file" class="form-control" accept=".doc,.docx,.csv,.rtf,.xlsx,.xls,.txt,.pdf,.zip" required>
           <button class="btn btn-primary" type="submit">Upload</button>
         </form>
-
+        <form class="form">
+          <div class="form-group w-25">
+            <label for="show" class="sr-only">Show</label>
+            <select class="form-control" id="show" name="show">
+              <option value="no" {{ Request::get('show') == 'no' ? 'selected' : '' }}>Show Active</option>
+              <option value="yes" {{ Request::get('show') == 'yes' ? 'selected' : '' }}>Archive</option>
+            </select>
+          </div>
+        </form>
+        <script>
+          $(document).ready(function() {
+            $('#show').change(function() {
+              var show = $(this).val();
+              window.location.href = "{{url('/reports/'. $category)}}?show=" + show;
+            });
+          });
+        </script>
         <table class="table">
           <thead>
             <tr>
@@ -122,7 +138,9 @@
               <td width="10%">{{ $file->type }}</td>
               <td width="25%">
                 <a href="{{url('file/'.$file->name)}}"><button class="btns btn1"><i class="fa fa-eye"></i></button></a>
+                @if(!$file->deleted_at)
                 <a href="#deleteFile{{$file->id}}" data-toggle="modal"><button class="btns btn2"><i class="fa fa-trash"></i></button></a>
+                @endif
                 <a href="{{url('file/'.$file->name)}}" download><button class="btns btn3"><i class="fa fa-download"></i></button></a>
                 {{-- <a href="#deleteFile{{$file->id}}" data-toggle="modal" class="btn btn-success">delete</a>
                 <a href="#deleteFile{{$file->id}}" data-toggle="modal" class="btn btn-success btn-sm">View</a>
@@ -143,7 +161,9 @@
                       <p class="text-warning"><small>This action cannot be undone.</small></p>
                     </div>
                     <div class="footer" style="text-align: right;">
+
                       <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+
                       {{-- <input type="submit" href="{{url('deleteResidents', $residents->id)}}" class="btn btn-danger" value="Delete"> --}}
                       <a class="btn btn-danger" href="{{url('deleteFile',$file->id)}}">Delete</a>
                     </div>

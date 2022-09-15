@@ -47,8 +47,8 @@ class BarangayOfficialController extends Controller
     $official = barangayOfficial::create($formFields);
 
     ActivityLog::log(
-      'barangay_officials',
       'created barangay official with id ' . $official->id . ' ' . $official->name,
+      'barangay_officials',
       $official->id,
     );
     return redirect('/listBrgyOfficial')->with('message', 'Barangay Official Created Successfuly');
@@ -62,8 +62,8 @@ class BarangayOfficialController extends Controller
     $official->delete();
 
     ActivityLog::log(
+      'deleted barangay official with id ' . $official->id . ' ' . $official->name,
       'barangay_officials',
-      'Deleted barangay official with id ' . $official->id . ' ' . $official->name,
       $official->id,
     );
     return back()->with('message', 'Barangay Official Profile Deleted');
@@ -90,8 +90,8 @@ class BarangayOfficialController extends Controller
     $official->update($formFields);
 
     ActivityLog::log(
+      'updated barangay official with id ' . $official->id . ' ' . $official->name,
       'barangay_officials',
-      'Updated barangay official with id ' . $official->id . ' ' . $official->name,
       $official->id,
     );
 
@@ -122,11 +122,15 @@ class BarangayOfficialController extends Controller
 
 
     if (Auth::guard('barangay_official')->attempt($credentials)) {
-      Auth::login(Auth::guard('barangay_official')->user());
+
+      $request->session()->regenerate();
+
+      $user = Auth::guard('barangay_official')->user();
+
       ActivityLog::log(
+        'barangay official logged in',
         'barangay_officials',
-        'Logged in barangay official with id ' . Auth::user()->id . ' ' . Auth::user()->name,
-        Auth::user()->id,
+        $user->id,
       );
       return redirect('/dashboard');
     } else {
@@ -140,17 +144,16 @@ class BarangayOfficialController extends Controller
   {
 
     ActivityLog::log(
+      'barangay official logged out',
       'barangay_officials',
-      'Logged out barangay official with id ' . Auth::guard('barangay_official')->user()->id . ' ' . Auth::guard('barangay_official')->user()->name,
       Auth::guard('barangay_official')->user()->id,
     );
 
-    // logout all sessions
+    // logout all guards
     Auth::guard('barangay_official')->logout();
     Auth::logout();
-
-    // $request->session()->invalidate();
-    // $request->session()->regenerateToken();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
     return redirect('/')->with('message', ' Youre Logout');
   }

@@ -33,8 +33,8 @@ class SettingsController extends Controller
 
 
     ActivityLog::log(
-      'settings',
       'updated settings with id ' . $setting->id . ' ' . $setting->barangay_name,
+      'settings',
       $setting->id,
     );
     return back()->with('message', 'Update Successful');

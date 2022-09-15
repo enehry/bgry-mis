@@ -28,7 +28,6 @@ class AdminResidentsController extends Controller
       ->where('voter_status', '=', 'Non Voter')->count();
     $senior = DB::table('admin_residents')
       ->where('age', '>', '59')->count();
-
     return view('admin.dashboard', ['residents' => $residents, 'male' => $male, 'female' => $female, 'senior' => $senior, 'voter' => $voter, 'nonvoter' => $nonvoter]);
   }
 
@@ -121,10 +120,10 @@ class AdminResidentsController extends Controller
     $adminResidents = AdminResidents::create($formFields);
 
     ActivityLog::log(
-      'App\AdminResidents',
-      'Added Resident',
-      $adminResidents->first_name .
+      ' added resident ' .
+        $adminResidents->first_name .
         ' ' . $adminResidents->last_name,
+      'admin_residents',
       $adminResidents->id
     );
 
@@ -138,14 +137,20 @@ class AdminResidentsController extends Controller
 
     $residents->delete();
 
+    ActivityLog::log(
+      ' deleted resident ' .
+        $residents->first_name .
+        ' ' . $residents->last_name,
+      'admin_residents',
+      $residents->id
+    );
+
     return back()->with('message', 'Residents Profile Deleted');
   }
 
   //Show Edit Residents Form
   public function editResidents(AdminResidents $residents)
   {
-
-
     return view('Admin.residents', ['residents' => $residents]);
   }
 
@@ -190,6 +195,14 @@ class AdminResidentsController extends Controller
 
     $residents->update($formFields);
 
+    ActivityLog::log(
+      'updated resident ' .
+        $residents->first_name .
+        ' ' . $residents->last_name,
+      'admin_residents',
+      $residents->id
+    );
+
     return back()->with('message', 'Update Successful');
   }
 
@@ -214,6 +227,14 @@ class AdminResidentsController extends Controller
       if (Hash::check($request->password, $residents->password)) {
         $request->session()->put('id', $residents->id);
         Auth::login($residents);
+
+        ActivityLog::log(
+          'logged in ' .
+            $residents->first_name .
+            ' ' . $residents->last_name,
+          'admin_residents',
+          $residents->id
+        );
         return redirect('/home');
       } else {
         return back()->with('fail', ' Password Incorrect ');
